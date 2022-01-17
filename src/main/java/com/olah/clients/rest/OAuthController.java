@@ -116,6 +116,7 @@ public class OAuthController {
 
     private ResponseEntity<?> tratarUsuarioFacebook(final User user) {
         TokenDTO tokenRes = null;
+        System.out.println(user);
         if (repository.existsByEmail(user.getEmail())) {
             this.usuario = repository.findByEmail(user.getEmail()).get();
         } else {
