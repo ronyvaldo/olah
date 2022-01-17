@@ -72,8 +72,8 @@ public class OAuthController {
     @PostMapping("/facebook")
     public ResponseEntity<?> facebook(@RequestBody TokenDTO tokenDTO) throws IOException {
         Facebook facebook = new FacebookTemplate(tokenDTO.getValue());
-        //final String[] fields = {"email","picture"};
-        User user = facebook.fetchObject("me", User.class/*, fields*/);
+        String [] fields = { "id", "email",  "first_name", "last_name" };
+        User user = facebook.fetchObject("me", User.class, fields);
         return tratarUsuarioFacebook(user);
     }
 
