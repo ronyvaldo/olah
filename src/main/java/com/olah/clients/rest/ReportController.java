@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.olah.clients.model.entity.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,6 +42,7 @@ public class ReportController {
     private final String extensaoXls = ".xlsx";
 
     @GetMapping("/membros={idIgreja}")
+    @PreAuthorize("hasAnyRole('USUARIO_MASTER','USUARIO_ADMINISTRADOR')")
     public void exportarMembrosEmXls(@PathVariable Integer idIgreja,
                                      HttpServletResponse response) throws IOException, JRException {
         String nomeDoRelatorio = NOME_RELATORIO_MEMBROS + retornarSufixoDoRelatorio() + extensaoXls;
