@@ -1,5 +1,6 @@
 package com.olah.clients.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -16,6 +17,18 @@ public class Evento {
 
     @Column(nullable = false)
     private String nome;
+
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    private Date dataInicio;
+
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    private Date dataTermino;
+
+    @JsonFormat(pattern = "HH:mm")
+    private Date horarioInicio;
+
+    @JsonFormat(pattern = "HH:mm")
+    private Date horarioTermino;
 
     @Column(name = "data_cadastro")
     private Date dataCadastro = new Date();

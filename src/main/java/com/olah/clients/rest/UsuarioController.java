@@ -1,10 +1,12 @@
 package com.olah.clients.rest;
 
 import com.olah.clients.model.dominio.DominioPerfilUsuario;
+import com.olah.clients.model.dto.LancamentosIndicadoresDTO;
 import com.olah.clients.model.entity.Usuario;
 import com.olah.clients.exception.UsuarioCadastradoException;
 import com.olah.clients.model.repository.UsuarioRepository;
 import com.olah.clients.service.UsuarioService;
+import org.bouncycastle.util.Times;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,6 +22,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
+import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -48,6 +52,49 @@ public class UsuarioController {
         return repository.findAll(pageRequest);
     }
 
+    @GetMapping("/todosDaIgrejaPorPerfil={perfil}")
+    @PreAuthorize("hasAnyRole('USUARIO_MASTER','USUARIO_ADMINISTRADOR')")
+    public List<Usuario> obterTodosDaIgrejaPorPerfil(@PathVariable Integer perfil,
+                                                         @RequestParam(value= "idIgreja") Integer idIgreja) {
+        List<Usuario> retorno = new ArrayList<Usuario>();
+        StringBuilder stringQuery = new StringBuilder()
+                .append("SELECT u.id ")
+                .append(" FROM Usuario u WHERE u.perfil =?1 ")
+                .append("   AND u.id IN (SELECT iu.id_usuario FROM public.igreja_usuario iu ")
+                .append("       WHERE iu.id_igreja=?2)");
+        Query query = entity.createNativeQuery(stringQuery.toString());
+        query.setParameter(1, perfil);
+        query.setParameter(2, idIgreja);
+        Usuario usuario = null;
+        try {
+            List<Integer> result = (List<Integer>) query.getResultList();
+            for (Integer i : result) {
+                usuario = selectPorId(i);
+                retorno.add(usuario);
+            }
+            /*for (Object[] l : result) {
+                usuario = new Usuario();
+                /*usuario.setNome((String) l[0]);
+                usuario.setEmail((String) l[1]);
+                usuario.setCpf((String) l[2]);
+                Timestamp dataNascimento = (Timestamp) l[3];
+                if (dataNascimento != null) {
+                    usuario.setDataNascimento(new Date(dataNascimento.getTime()));
+                }
+                usuario.setDddCelular((String) l[4]);
+                usuario.setNumeroCelular((String) l[5]);
+                Timestamp dataCadastro = (Timestamp) l[6];
+                if (dataCadastro != null) {
+                    usuario.setDataCadastro(new Date(dataCadastro.getTime()));
+                }
+                retorno.add(usuario);
+            }*/
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return retorno;
+    }
+
     @GetMapping("/perfil={perfil}")
     @PreAuthorize("hasAnyRole('USUARIO_MASTER','USUARIO_ADMINISTRADOR')")
     public Page<Usuario> obterUsuariosPorPerfil(@PathVariable Integer perfil,
@@ -56,6 +103,21 @@ public class UsuarioController {
                                                 @SortDefault(sort = "dataCadastro", direction = Sort.Direction.DESC) Sort sort) {
         Pageable pageable = PageRequest.of(pagina, tamanhoPagina, sort);
         return repository.findByPerfil(perfil, pageable);
+    }
+
+    @GetMapping("/likeNomeMembroPageable={nome}")
+    @PreAuthorize("hasAnyRole('USUARIO_MASTER','USUARIO_ADMINISTRADOR')")
+        public List<Usuario> obterMembrosPorNomeLikePageable(@PathVariable String nome,
+                                                @RequestParam(value= "page", defaultValue = "0") Integer pagina,
+                                                @RequestParam(value = "size", defaultValue = "10") Integer tamanhoPagina) {
+        Integer page = pagina.equals(0) ? pagina : pagina * tamanhoPagina;
+        Query query = entity.createQuery("select u from Usuario u where u.perfil =?1 and UPPER(u.nome) like UPPER(?2)"+
+                        " ORDER BY u.dataCadastro DESC ", Usuario.class)
+                .setFirstResult(page).setMaxResults(tamanhoPagina);
+        query.setParameter(1, DominioPerfilUsuario.MEMBRO.ordinal());
+        query.setParameter(2, nome+"%");
+        List<Usuario> retorno = query.getResultList();
+        return retorno;
     }
 
     @GetMapping("/likeNomeMembro={nome}")
@@ -113,6 +175,9 @@ public class UsuarioController {
         repository.findById(id)
                 .map( usuario -> {
                     usuarioAtualizado.setId(id);
+                    if (usuarioAtualizado.getSenha() == null || usuarioAtualizado.getSenha().isEmpty()) {
+                        usuarioAtualizado.setSenha(usuario.getSenha());
+                    }
                     return repository.save(usuarioAtualizado);
                 })
                 .orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado."));

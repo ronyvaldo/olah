@@ -14,10 +14,12 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         http.authorizeRequests()
                 //.antMatchers("/api/usuarios/**").hasRole("USER")
                 //hasAnyRole quando mais de uma Role
-                .antMatchers("/api/usuarios/autocadastro/**","/api/oauth/**","/api/igrejas/likeNome=**", "/swagger-ui.html")
+                .antMatchers("/api/usuarios/autocadastro/**","/api/oauth/**","/api/igrejas/likeNome=**", "/swagger-ui.html",
+                        "/api/senha/**")
                 .permitAll()
                 .antMatchers("/api/usuarios/**","/api/igrejas/**","/api/contribuicoes/**","/api/despesas/**",
-                        "/api/tiposContribuicao/**", "/api/lancamentos/**", "/api/tiposDespesa/**", "/api/profissoes/**")
+                        "/api/tiposContribuicao/**", "/api/lancamentos/**", "/api/tiposDespesa/**", "/api/profissoes/**",
+                        "/api/eventos/**", "/api/grupos/**", "/api/eventoUsuario/**", "/api/relatorios/**")
                 .authenticated()
                 .anyRequest().denyAll();
     }

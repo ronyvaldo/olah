@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.util.Date;
 
 @Table(name = "igreja")
@@ -16,6 +17,7 @@ public class Igreja {
     private Integer id;
 
     @Column(nullable = false)
+    @NotEmpty(message = "{campo.nome.obrigatorio}")
     private String nome;
 
     @Column(name = "data_cadastro", updatable = false)
