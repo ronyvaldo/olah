@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Table(name = "despesa")
@@ -20,6 +21,7 @@ public class Despesa {
     private TipoDespesa tipoDespesa;
 
     @Column(nullable = false)
+    @NotNull(message = "Você deve informar um valor")
     private Double valor;
 
     @Column(name = "data_cadastro", updatable = false)
@@ -28,6 +30,7 @@ public class Despesa {
 
     @Column(name = "data_despesa")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy", timezone="GMT-3")
+    @NotNull(message = "Você deve informar a data da despesa")
     private Date dataDespesa;
 
     @OneToOne
@@ -36,6 +39,7 @@ public class Despesa {
 
     @OneToOne
     @JoinColumn(name = "id_igreja")
+    @NotNull(message = "Você deve informar a igreja")
     private Igreja igreja;
 
     @Column(name = "data_inativacao")

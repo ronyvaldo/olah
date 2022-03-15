@@ -5,6 +5,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Table(name = "igreja")
@@ -30,6 +31,7 @@ public class Igreja {
 
     @OneToOne
     @JoinColumn(name = "id_grupo_congregacional")
+    @NotNull(message = "O Grupo Congregacional deve ser informado")
     private GrupoCongregacional grupoCongregacional;
 
     @Column(name = "data_inativacao")

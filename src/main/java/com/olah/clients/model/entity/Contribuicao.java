@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Table(name = "contribuicao")
@@ -17,10 +19,12 @@ public class Contribuicao {
 
     @OneToOne
     @JoinColumn(name = "id_tipo_contribuicao")
+    @NotNull(message = "Você deve selecionar um tipo de contribuição")
     private TipoContribuicao tipoContribuicao;
 
     @OneToOne
     @JoinColumn(name = "id_usuario")
+    @NotNull(message = "Você deve informar um membro")
     private Usuario membro;
 
     @Column(nullable = false)
@@ -32,6 +36,7 @@ public class Contribuicao {
 
     @Column(name = "data_contribuicao")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy", timezone="GMT-3")
+    @NotNull(message = "Você deve informar a data da contribuição")
     private Date dataContribuicao;
 
     @OneToOne
