@@ -35,6 +35,13 @@ public class IgrejaController {
         return igrejas;
     }
 
+    @GetMapping("/paginado")
+    public Page<Igreja> obterTodasPaged(@RequestParam(value= "page", defaultValue = "0") Integer pagina,
+                                        @RequestParam(value = "size", defaultValue = "10") Integer tamanhoPagina) {
+        PageRequest pageRequest = PageRequest.of(pagina, tamanhoPagina);
+        return repository.findAll(pageRequest);
+    }
+
     @GetMapping("/grupoCongregacional={idGrupo}")
     public List<Igreja> findByGrupoCongregacional(@PathVariable Integer idGrupo) {
         return repository.findByGrupoCongregacionalId(idGrupo);

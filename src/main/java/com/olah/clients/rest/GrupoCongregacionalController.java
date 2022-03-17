@@ -29,7 +29,13 @@ public class GrupoCongregacionalController {
     private EntityManager entity;
 
     @GetMapping
-    public Page<GrupoCongregacional> obterTodos(@RequestParam(value= "page", defaultValue = "0") Integer pagina,
+    public List<GrupoCongregacional> obterTodos() {
+        List<GrupoCongregacional> grupos = repository.findAll();
+        return grupos;
+    }
+
+    @GetMapping("/paginado")
+    public Page<GrupoCongregacional> obterTodosPaged(@RequestParam(value= "page", defaultValue = "0") Integer pagina,
                                                        @RequestParam(value = "size", defaultValue = "10") Integer tamanhoPagina,
                                                        @SortDefault(sort = "dataCadastro", direction = Sort.Direction.DESC) Sort sort) {
         Pageable pageable = PageRequest.of(pagina, tamanhoPagina, sort);
