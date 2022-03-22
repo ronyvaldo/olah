@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -40,6 +42,35 @@ public class EventoController {
                                                        @SortDefault(sort = "dataInicio", direction = Sort.Direction.ASC) Sort sort) {
         Pageable pageable = PageRequest.of(pagina, tamanhoPagina, sort);
         return repository.findByIgrejaId(idIgreja, pageable);
+    }
+
+    @GetMapping("/idUsuario={idUsuario}")
+    public List<Evento> findByIgrejaAndUsuario(@PathVariable Integer idUsuario,
+                                               @RequestParam(value= "idIgreja") Integer idIgreja) {
+        List<Evento> retorno = new ArrayList<Evento>();
+        StringBuilder stringQuery = new StringBuilder()
+                .append("SELECT e.id, ")
+                .append("   CASE WHEN EXISTS (SELECT 1 FROM public.evento_usuario eu ")
+                .append(" WHERE eu.id_evento=e.id and eu.id_usuario=?1) THEN 1 ELSE 0 END AS usuarioInscrito ")
+                .append("   FROM public.evento e WHERE e.id_igreja = ?2 ")
+                .append(" AND e.data_inicio > CURRENT_DATE ");
+        Query query = entity.createNativeQuery(stringQuery.toString());
+        query.setParameter(1, idUsuario);
+        query.setParameter(2, idIgreja);
+        try {
+            List<Object[]> result = (List<Object[]>) query.getResultList();
+            Evento evento = null;
+            for (Object[] l : result) {
+                evento = new Evento();
+                evento.setId((Integer) l[0]);
+                evento = selectPorId(evento.getId());
+                evento.setUsuarioInscrito((Integer)l[1] == 1);
+                retorno.add(evento);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return retorno;
     }
 
     @GetMapping("{id}")

@@ -4,4 +4,6 @@ import com.olah.clients.model.entity.EventoUsuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface EventoUsuarioRepository extends JpaRepository<EventoUsuario, Integer>  {
+
+    EventoUsuario findByUsuarioIdAndEventoId(Integer idUsuario, Integer idEvento);
 }

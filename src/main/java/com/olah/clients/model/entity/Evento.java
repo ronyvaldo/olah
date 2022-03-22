@@ -1,10 +1,12 @@
 package com.olah.clients.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Table(name = "evento")
 @Entity
@@ -51,5 +53,8 @@ public class Evento {
     @OneToOne
     @JoinColumn(name = "id_usuario_inativacao")
     private Usuario usuarioInativacao;
+
+    @Transient
+    private boolean usuarioInscrito;
 
 }

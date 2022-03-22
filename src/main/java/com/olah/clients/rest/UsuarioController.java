@@ -72,23 +72,6 @@ public class UsuarioController {
                 usuario = selectPorId(i);
                 retorno.add(usuario);
             }
-            /*for (Object[] l : result) {
-                usuario = new Usuario();
-                /*usuario.setNome((String) l[0]);
-                usuario.setEmail((String) l[1]);
-                usuario.setCpf((String) l[2]);
-                Timestamp dataNascimento = (Timestamp) l[3];
-                if (dataNascimento != null) {
-                    usuario.setDataNascimento(new Date(dataNascimento.getTime()));
-                }
-                usuario.setDddCelular((String) l[4]);
-                usuario.setNumeroCelular((String) l[5]);
-                Timestamp dataCadastro = (Timestamp) l[6];
-                if (dataCadastro != null) {
-                    usuario.setDataCadastro(new Date(dataCadastro.getTime()));
-                }
-                retorno.add(usuario);
-            }*/
         } catch (Exception e) {
             e.printStackTrace();
         }

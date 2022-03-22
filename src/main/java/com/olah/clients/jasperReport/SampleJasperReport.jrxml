@@ -1,24 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SampleJasperReport" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="7c53a56d-6b10-4b83-bc61-270dcfd0e6cc">
-	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="0"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SampleJasperReport" pageWidth="720" pageHeight="802" columnWidth="720" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" whenResourceMissingType="Empty" uuid="7c53a56d-6b10-4b83-bc61-270dcfd0e6cc">
+	<property name="ireport.zoom" value="1.4641000000000006"/>
+	<property name="ireport.x" value="85"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="P_NOME_IGREJA" class="java.lang.String"/>
 	<field name="nome" class="java.lang.String"/>
+	<field name="email" class="java.lang.String"/>
+	<field name="cpf" class="java.lang.String"/>
+	<field name="telefoneFormatado" class="java.lang.String"/>
+	<field name="dataNascimentoFormatada" class="java.lang.String"/>
+	<field name="idade" class="java.lang.Integer"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
 		<band height="39" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="0" width="555" height="26" uuid="124dcc2a-58eb-45f2-b023-1c0c01874a39"/>
+				<reportElement x="0" y="0" width="668" height="26" uuid="124dcc2a-58eb-45f2-b023-1c0c01874a39"/>
 				<textElement textAlignment="Center">
 					<font size="14" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Relatório de Membros]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="0" y="26" width="555" height="13" uuid="7943a5d9-700f-4524-bad6-7cf2287155e4"/>
+				<reportElement x="0" y="26" width="668" height="13" uuid="7943a5d9-700f-4524-bad6-7cf2287155e4"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$P{P_NOME_IGREJA}]]></textFieldExpression>
 			</textField>
@@ -33,6 +38,41 @@
 				</textElement>
 				<text><![CDATA[Nome]]></text>
 			</staticText>
+			<staticText>
+				<reportElement x="200" y="0" width="148" height="20" uuid="917a6bd9-bcd4-4717-b0a0-86ad052614b5"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[E-mail]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="348" y="0" width="83" height="20" uuid="b7e48f83-8a6f-4f66-8b21-3f59b650f68b"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[CPF]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="431" y="0" width="89" height="20" uuid="08b6f3e5-eedf-42cd-9488-34674098cd83"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Telefone]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="520" y="0" width="85" height="20" uuid="06b1a800-be1a-42df-89eb-85b1ac37631f"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Data Nascimento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="605" y="0" width="63" height="20" uuid="18af3b28-52e2-4650-830a-3d16eb76ecdc"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Idade]]></text>
+			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
@@ -40,6 +80,26 @@
 			<textField>
 				<reportElement x="0" y="0" width="200" height="20" uuid="adc50e41-4ddc-4256-bea9-b37531b49e64"/>
 				<textFieldExpression><![CDATA[$F{nome}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="200" y="0" width="148" height="20" uuid="ec2830dc-d114-4c83-86f0-21be5eb524ae"/>
+				<textFieldExpression><![CDATA[$F{email}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="348" y="0" width="83" height="20" uuid="4a873286-0ed0-4e0f-9a63-7caadda8ced4"/>
+				<textFieldExpression><![CDATA[($F{cpf}!=null)?$F{cpf}:""]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="431" y="0" width="89" height="20" uuid="4e48cd8c-3ad5-4c5a-8a5a-672039f9797b"/>
+				<textFieldExpression><![CDATA[($F{telefoneFormatado}!=null)?$F{telefoneFormatado}:""]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="520" y="0" width="85" height="20" uuid="4a0e115b-3889-489e-b4de-23f5a1a52f3b"/>
+				<textFieldExpression><![CDATA[(($F{dataNascimentoFormatada}!=null)?$F{dataNascimentoFormatada}:"")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="605" y="0" width="63" height="20" uuid="f0586d1a-0598-4e7f-bafc-91803734ee2b"/>
+				<textFieldExpression><![CDATA[($F{idade} != null ? $F{idade}+" anos" : "")]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

@@ -2,9 +2,9 @@ package com.olah.clients.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.olah.clients.model.dominio.DominioPerfilUsuario;
+import com.olah.clients.util.DataUtil;
 import com.olah.clients.validation.groups.NotNullField;
 import com.olah.clients.validation.sequence.CpfUsuarioNotNullFieldProvider;
 import lombok.Data;
@@ -93,6 +93,9 @@ public class Usuario {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy", timezone="GMT-3")
     private Date dataNascimento;
 
+    @Transient
+    private Integer idade;
+
     @OneToOne
     @JoinColumn(name = "id_usuario_inativacao")
     private Usuario usuarioInativacao;
@@ -147,4 +150,26 @@ public class Usuario {
         this.senha = senha;
     }
 
+    public Integer getIdade() {
+        if (getDataNascimento() != null) {
+           return new DataUtil().getIdade(getDataNascimento());
+        }
+        return null;
+    }
+
+    @JsonIgnore
+    public String getTelefoneFormatado() {
+        if (getDddCelular() != null && getNumeroCelular() != null) {
+            return "(" + getDddCelular() + ") " + getNumeroCelular();
+        }
+        return null;
+    }
+
+    @JsonIgnore
+    public String getDataNascimentoFormatada() {
+        if (getDataNascimento() != null) {
+            return new DataUtil().converterDateToStringData(getDataNascimento());
+        }
+        return null;
+    }
 }
