@@ -42,7 +42,7 @@ public class TipoContribuicaoController {
         repository.save(tipoContribuicao);
     }
 
-    private Boolean isTipoContribuicaoExiste(@PathVariable TipoContribuicao tipoContribuicao) {
+    private Boolean isTipoContribuicaoExiste(TipoContribuicao tipoContribuicao) {
         Boolean retorno = false;
         StringBuilder stringQuery = new StringBuilder()
                 .append("SELECT 1 FROM public.tipo_contribuicao tc ")
@@ -60,9 +60,8 @@ public class TipoContribuicaoController {
             query.setParameter(2, tipoContribuicao.getGrupoCongregacional().getId());
         }
         try {
-            Object[] result = (Object[]) query.getSingleResult();
-            Integer i = ((Integer) result[0]);
-            if (i != null && i.equals(1)) {
+            Integer result = (Integer) query.getSingleResult();
+            if (result != null && result == 1) {
                 retorno = true;
             }
         } catch (Exception e) {

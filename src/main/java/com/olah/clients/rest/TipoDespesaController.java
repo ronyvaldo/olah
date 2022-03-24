@@ -60,9 +60,8 @@ public class TipoDespesaController {
             query.setParameter(2, tipoDespesa.getGrupoCongregacional().getId());
         }
         try {
-            Object[] result = (Object[]) query.getSingleResult();
-            Integer i = ((Integer) result[0]);
-            if (i != null && i.equals(1)) {
+            Integer result = (Integer) query.getSingleResult();
+            if (result != null && result == 1) {
                 retorno = true;
             }
         } catch (Exception e) {
