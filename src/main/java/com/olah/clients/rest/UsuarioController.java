@@ -200,4 +200,26 @@ public class UsuarioController {
         return retorno;
     }
 
+    @GetMapping("/pesquisaUsuarioSemAcesso={credencial}")
+    public Usuario isUsuarioSemAcesso(@PathVariable String credencial) {
+        Usuario usuario = selectPorCredencial(credencial);
+        if (usuario != null && (usuario.getSenha() == null || usuario.getSenha().isEmpty())) {
+         return usuario;
+        }
+        return null;
+    }
+
+    @PutMapping("/inserirSenha={credencial}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Transactional
+    public Integer inserirSenha(@PathVariable String credencial, @RequestParam(value= "senha") String senha) {
+        Usuario usuario = selectPorCredencial(credencial);
+        if (usuario.getSenha() == null || usuario.getSenha().isEmpty()) {
+            int retorno = entity.createQuery("UPDATE Usuario set senha="+senha+" WHERE id ="+usuario.getId()).executeUpdate();
+            return retorno;
+        }
+        return null;
+    }
+
+
 }

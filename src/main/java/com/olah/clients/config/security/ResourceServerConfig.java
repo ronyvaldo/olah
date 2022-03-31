@@ -15,7 +15,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 //.antMatchers("/api/usuarios/**").hasRole("USER")
                 //hasAnyRole quando mais de uma Role
                 .antMatchers("/api/usuarios/autocadastro/**","/api/oauth/**","/api/igrejas/likeNome=**", "/swagger-ui.html",
-                        "/api/senha/**")
+                        "/api/senha/**", "/api/usuarios/pesquisaUsuarioSemAcesso**", "/api/usuarios/inserirSenha**")
                 .permitAll()
                 .antMatchers("/api/usuarios/**","/api/igrejas/**","/api/contribuicoes/**","/api/despesas/**",
                         "/api/tiposContribuicao/**", "/api/lancamentos/**", "/api/tiposDespesa/**", "/api/profissoes/**",
