@@ -15,7 +15,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.persistence.EntityManager;
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/despesas")
@@ -58,6 +57,18 @@ public class DespesaController {
     @PreAuthorize("hasAnyRole('USUARIO_MASTER','USUARIO_ADMINISTRADOR')")
     public void salvar(@RequestBody @Valid Despesa despesa) {
         repository.save(despesa);
+    }
+
+    @DeleteMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAnyRole('USUARIO_MASTER','USUARIO_ADMINISTRADOR')")
+    public void deletar( @PathVariable Integer id) {
+        repository.findById(id)
+                .map(despesa -> {
+                    repository.delete(despesa);
+                    return Void.TYPE;
+                })
+                .orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Despesa não encontrada"));
     }
 
 

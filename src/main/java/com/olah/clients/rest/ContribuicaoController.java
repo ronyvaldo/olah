@@ -1,6 +1,5 @@
 package com.olah.clients.rest;
 
-import com.olah.clients.model.entity.Despesa;
 import com.olah.clients.model.repository.ContribuicaoRepository;
 import com.olah.clients.model.entity.Contribuicao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/contribuicoes")
@@ -55,6 +53,18 @@ public class ContribuicaoController {
     @PreAuthorize("hasAnyRole('USUARIO_MASTER','USUARIO_ADMINISTRADOR')")
     public void salvar(@RequestBody @Valid Contribuicao contribuicao) {
         repository.save(contribuicao);
+    }
+
+    @DeleteMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAnyRole('USUARIO_MASTER','USUARIO_ADMINISTRADOR')")
+    public void deletar( @PathVariable Integer id) {
+        repository.findById(id)
+                .map(contribuicao -> {
+                    repository.delete(contribuicao);
+                    return Void.TYPE;
+                })
+                .orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Contribuição não encontrada"));
     }
 
 }
