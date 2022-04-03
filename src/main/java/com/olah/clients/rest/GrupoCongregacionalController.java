@@ -35,6 +35,7 @@ public class GrupoCongregacionalController {
     }
 
     @GetMapping("/paginado")
+    @PreAuthorize("hasAnyRole('USUARIO_MASTER')")
     public Page<GrupoCongregacional> obterTodosPaged(@RequestParam(value= "page", defaultValue = "0") Integer pagina,
                                                        @RequestParam(value = "size", defaultValue = "10") Integer tamanhoPagina,
                                                        @SortDefault(sort = "dataCadastro", direction = Sort.Direction.DESC) Sort sort) {
